@@ -31,6 +31,8 @@ struct SwiftCleaner: AsyncParsableCommand {
 
     @Flag(name: .long, help: "Skip build if you already made it. Do not use this flag the first time you use SwiftCleaner")
     private var skipBuild = false
+    
+    private static let reportName = "periphery-report.json"
 
     init() {}
 
@@ -44,7 +46,7 @@ struct SwiftCleaner: AsyncParsableCommand {
                 let task = Process()
                 task.executableURL = peripheryBinaryURL
                 task.arguments = commands
-                let filePath = FileManager.default.currentDirectoryPath + "/" + output
+                let filePath = "\(FileManager.default.currentDirectoryPath)/\(output)"
                 let fileURL = URL(fileURLWithPath: filePath)
                 FileManager.default.createFile(atPath: filePath, contents: nil)
                 let outputFileHandle = try FileHandle(forWritingTo: fileURL)
@@ -98,11 +100,10 @@ struct SwiftCleaner: AsyncParsableCommand {
         // 1. Generate DerivedData
         if !skipBuild {
             print("📦 Building project ...")
-            shell("rm -rf \(FileManager.default.currentDirectoryPath)/DerivedData")
             if let path = workspace {
-                shell("xcodebuild -workspace \(path) -scheme \(projectName ?? "") -parallelizeTargets -quiet -derivedDataPath \(FileManager.default.currentDirectoryPath)/DerivedData -destination \"\(destination)\" -quiet clean build CODE_SIGNING_ALLOWED=\"NO\" ENABLE_BITCODE=\"NO\" DEBUG_INFORMATION_FORMAT=\"dwarf\" COMPILER_INDEX_STORE_ENABLE=\"YES\" INDEX_ENABLE_DATA_STORE=\"YES\"")
+                shell("xcodebuild -workspace \(path) -scheme \(projectName ?? "") -parallelizeTargets -quiet -derivedDataPath \(FileManager.default.derivedData) -destination \"\(destination)\" -quiet clean build CODE_SIGNING_ALLOWED=\"NO\" ENABLE_BITCODE=\"NO\" DEBUG_INFORMATION_FORMAT=\"dwarf\" COMPILER_INDEX_STORE_ENABLE=\"YES\" INDEX_ENABLE_DATA_STORE=\"YES\"")
             } else if let path = project {
-                shell("xcodebuild -project \(path) -scheme \(projectName ?? "") -parallelizeTargets -quiet -derivedDataPath \(FileManager.default.currentDirectoryPath)/DerivedData -destination \"\(destination)\" -quiet clean build CODE_SIGNING_ALLOWED=\"NO\" ENABLE_BITCODE=\"NO\" DEBUG_INFORMATION_FORMAT=\"dwarf\" COMPILER_INDEX_STORE_ENABLE=\"YES\" INDEX_ENABLE_DATA_STORE=\"YES\"")
+                shell("xcodebuild -project \(path) -scheme \(projectName ?? "") -parallelizeTargets -quiet -derivedDataPath \(FileManager.default.derivedData) -destination \"\(destination)\" -quiet clean build CODE_SIGNING_ALLOWED=\"NO\" ENABLE_BITCODE=\"NO\" DEBUG_INFORMATION_FORMAT=\"dwarf\" COMPILER_INDEX_STORE_ENABLE=\"YES\" INDEX_ENABLE_DATA_STORE=\"YES\"")
             } else {
                 print("❌ Either PROJECT_PATH: \(project ?? "Unknown") or WORKSPACE_PATH: \(workspace ?? "Unknown") is missing")
                 SwiftCleaner.exit(withError: Error.code(1))
@@ -119,7 +120,7 @@ struct SwiftCleaner: AsyncParsableCommand {
                 "--targets", "\(projectName ?? "")",
                 "--skip-build",
                 "--format", "json",
-                "--index-store-path", "\(FileManager.default.currentDirectoryPath)/DerivedData/Index.noindex/DataStore/",
+                "--index-store-path", "\(FileManager.default.derivedData)/Index.noindex/DataStore/",
                 "--retain-public",
                 "--disable-redundant-public-analysis",
                 "--retain-objc-accessible",
@@ -128,7 +129,7 @@ struct SwiftCleaner: AsyncParsableCommand {
                 "--retain-unused-protocol-func-params",
                 "--retain-swift-ui-previews",
                 "--disable-update-check",
-                output: "periphery-report.json"
+                output: SwiftCleaner.reportName
             )
         } else if let project {
             periphery(
@@ -138,7 +139,7 @@ struct SwiftCleaner: AsyncParsableCommand {
                 "--targets", "\(projectName ?? "")",
                 "--skip-build",
                 "--format", "json",
-                "--index-store-path", "\(FileManager.default.currentDirectoryPath)/DerivedData/Index.noindex/DataStore/",
+                "--index-store-path", "\(FileManager.default.derivedData)/Index.noindex/DataStore/",
                 "--retain-public",
                 "--disable-redundant-public-analysis",
                 "--retain-objc-accessible",
@@ -147,13 +148,15 @@ struct SwiftCleaner: AsyncParsableCommand {
                 "--retain-unused-protocol-func-params",
                 "--retain-swift-ui-previews",
                 "--disable-update-check",
-                output: "periphery-report.json"
+                output: SwiftCleaner.reportName
             )
         }
 
         // 3. Erase
-        try await SwiftEraserCommand(reportPath: "periphery-report.json").run()
+        try await SwiftEraserCommand(reportPath: SwiftCleaner.reportName).run()
 
+        shell("rm \(SwiftCleaner.reportName)")
+        shell("rm default.profraw")
         print("✅ Cleaned!")
     }
 }

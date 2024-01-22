@@ -2,7 +2,7 @@ import SwiftSyntax
 
 extension CodeBlockItemListSyntax.Element {
     var hasNoMembers: Bool {
-        self.item.declGroupSyntaxProtocol?.memberBlock.members.isEmpty == true
+        self.item.declGroupSyntax?.memberBlock.members.isEmpty == true
     }
 
     var name: String? {

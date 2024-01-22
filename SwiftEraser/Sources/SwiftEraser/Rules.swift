@@ -2,8 +2,6 @@ import Foundation
 import SwiftSyntax
 import SwiftParser
 
-typealias DeclGroupSyntaxProtocol = DeclGroupSyntax & DeclSyntaxProtocol
-
 private var collectedDeletedProtocols = [ProtocolDeclSyntax]()
 private let CodingKey = "CodingKey"
 
@@ -44,7 +42,7 @@ func delete(
             return nil
         }
         if types.contains(.redundantConformance),
-           let declaration = stmt.item.declGroupSyntaxProtocol {
+           let declaration = stmt.item.declGroupSyntax {
             return stmt.map {
                 declaration.without(protocolConformance: node.memberOrDeclName)
             }
@@ -69,7 +67,7 @@ func delete(
         if kind == .varInstance,
            collectedDeclConformancesToCodingKey.isEmpty == false,
            let statementName = stmt.item.computedName,
-           let declaration = stmt.item.declGroupSyntaxProtocol
+           let declaration = stmt.item.declGroupSyntax
         {
             // Iterate once again through the whole file and if found the parent scope name decl that conform to CodingKey and match the name of the current statement then proceed to deletion
             return collectedDeclConformancesToCodingKey[statementName] == nil
@@ -79,7 +77,7 @@ func delete(
         // Remove var instance
         if kind == .varInstance || kind == .varStatic,
            stmt.item.is(into: node.parent),
-           let declaration = stmt.item.declGroupSyntaxProtocol
+           let declaration = stmt.item.declGroupSyntax
         {
             let editedStmt = stmt.map {
                 declaration.without(property: node.memberOrDeclName)
@@ -109,7 +107,7 @@ func delete(
         // Remove local functions or static functions
         if kind == .functionMethodInstance || kind == .functionMethodStatic,
            stmt.item.is(into: node.parent),
-           let declaration = stmt.item.declGroupSyntaxProtocol
+           let declaration = stmt.item.declGroupSyntax
         {
             var editedStmt = stmt.map {
                 declaration.without(function: node.memberOrDeclName, node)
@@ -132,7 +130,7 @@ func delete(
         // Remove local subscript functions
         if kind == .functionSubscript,
            stmt.item.is(into: node.parent),
-           let declaration = stmt.item.declGroupSyntaxProtocol
+           let declaration = stmt.item.declGroupSyntax
         {
             let editedStmt = stmt.map {
                 declaration.without(functionSubscript: node.memberOrDeclName, node)
@@ -146,7 +144,7 @@ func delete(
         // MARK: Initializer section
         if kind == .functionConstructor,
            stmt.item.is(into: node.parent),
-           let declaration = stmt.item.declGroupSyntaxProtocol
+           let declaration = stmt.item.declGroupSyntax
         {
             let editedStmt = stmt.map {
                 declaration.without(functionConstructor: node.memberOrDeclName, node)

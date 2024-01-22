@@ -24,7 +24,7 @@ extension CodeBlockItemSyntax {
         }
     }
 
-    func map<T: DeclSyntaxProtocol>(_ transform: () -> T) -> Self {
+    func map(_ transform: () -> some DeclSyntaxProtocol) -> Self {
         return self.with(
             \.item,
              CodeBlockItemSyntax.Item.decl(

@@ -6,7 +6,7 @@ extension CodeBlockItemSyntax.Item {
         && self.computedName == parentNode?.computedName
     }
 
-    var declGroupSyntaxProtocol: (any DeclGroupSyntaxProtocol)? {
+    var declGroupSyntax: (any DeclGroupSyntax & DeclSyntaxProtocol)? {
         switch self {
         case .decl(let declSyntax):
             if let result = declSyntax.as(ActorDeclSyntax.self) {
@@ -27,9 +27,9 @@ extension CodeBlockItemSyntax.Item {
             if let result = declSyntax.as(ProtocolDeclSyntax.self) {
                 return result
             }
-            return (any DeclGroupSyntaxProtocol)?.none
+            return (any DeclGroupSyntax & DeclSyntaxProtocol)?.none
         case .stmt, .expr:
-            return (any DeclGroupSyntaxProtocol)?.none
+            return (any DeclGroupSyntax & DeclSyntaxProtocol)?.none
         }
     }
 }
