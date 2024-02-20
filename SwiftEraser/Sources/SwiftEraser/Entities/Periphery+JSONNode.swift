@@ -29,12 +29,89 @@ enum Periphery {
             case empty = ""
         }
 
-        enum Hint: String, Codable {
-            case assignOnlyProperty = "assignOnlyProperty"
-            case redundantConformance = "redundantConformance"
-            case redundantProtocol = "redundantProtocol"
-            case redundantPublicAccessibility = "redundantPublicAccessibility"
-            case unused = "unused"
+        enum Hint: Codable, RawRepresentable, Equatable {
+            case assignOnlyProperty
+            case redundantConformance
+            case redundantProtocol
+            case redundantPublicAccessibility
+            case unused
+            case unsupported(String)
+            
+            private enum CodingKeys: CodingKey {}
+            
+            init(from decoder: Decoder) throws {
+                let container = try decoder.singleValueContainer()
+                let decodedString = try container.decode(String.self)
+                
+                switch decodedString {
+                    case "assignOnlyProperty":
+                        self = .assignOnlyProperty
+                    case "redundantConformance":
+                        self = .redundantConformance
+                    case "redundantProtocol":
+                        self = .redundantProtocol
+                    case "redundantPublicAccessibility":
+                        self = .redundantPublicAccessibility
+                    case "unused":
+                        self = .unused
+                    default:
+                        self = .unsupported(decodedString)
+                }
+            }
+            
+            func encode(to encoder: Encoder) throws {
+                var container = encoder.singleValueContainer()
+                
+                switch self {
+                    case .assignOnlyProperty:
+                        try container.encode("assignOnlyProperty")
+                    case .redundantConformance:
+                        try container.encode("redundantConformance")
+                    case .redundantProtocol:
+                        try container.encode("redundantProtocol")
+                    case .redundantPublicAccessibility:
+                        try container.encode("redundantPublicAccessibility")
+                    case .unused:
+                        try container.encode("unused")
+                    case .unsupported(let value):
+                        try container.encode(value)
+                }
+            }
+            
+            init?(rawValue: String) {
+                switch rawValue {
+                    case "assignOnlyProperty":
+                        self = .assignOnlyProperty
+                    case "redundantConformance":
+                        self = .redundantConformance
+                    case "redundantProtocol":
+                        self = .redundantProtocol
+                    case "redundantPublicAccessibility":
+                        self = .redundantPublicAccessibility
+                    case "unused":
+                        self = .unused
+                    default:
+                        self = .unsupported(rawValue)
+                        
+                }
+            }
+            
+            var rawValue: String {
+                switch self {
+                    case .assignOnlyProperty:
+                        return "assignOnlyProperty"
+                    case .redundantConformance:
+                        return "redundantConformance"
+                    case .redundantProtocol:
+                        return "redundantProtocol"
+                    case .redundantPublicAccessibility:
+                        return "redundantPublicAccessibility"
+                    case .unused:
+                        return "unused"
+                    case .unsupported(let string):
+                        return string
+                }
+            }
         }
 
         enum Kind: String, Codable {

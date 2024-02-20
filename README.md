@@ -2,6 +2,14 @@
   <img src="Screenshots/logo.png" alt="SwiftCleaner" height="140" />
   <br>
 </h1>
+<p align="center">
+<a href="https://github.com/paul1893/SwiftCleaner/actions">
+  <img src="https://img.shields.io/badge/coverage-unit%20tests%20-005dbf33" />
+</a>
+<img src="https://img.shields.io/badge/platform-macOS%20-008DFF">
+<br>
+<br>
+</p>
 
 # SwiftCleaner
 A tool to automatically remove dead code in your codebase.
@@ -23,6 +31,11 @@ SwiftCleaner
 ```
 
 # How it works
+<h1 align="center">
+  <img src="Screenshots/demo.gif" alt="SwiftCleaner" width="800" />
+  <br>
+</h1>
+
 ## Theory
 SwiftCleaner rely on [Periphery](https://github.com/peripheryapp/periphery) and SwiftEraser.  
 Periphery is a tool able to identify dead declarations and expose them as a JSON report. On large project it could be thousands of occurences. Applying these deletions could take time for a developer. That's when SwiftCleaner comes into place. SwiftCleaner is able to read this Periphery's report. Each node of the JSON is then converted into a Swift Syntax node and kept in memory. SwiftCleaner will then ask SwiftEraser to apply these deletions on the codebase automatically. They both heavily rely on [SwiftSyntax](https://github.com/apple/swift-syntax).

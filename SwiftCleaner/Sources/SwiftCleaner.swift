@@ -68,13 +68,13 @@ struct SwiftCleaner: AsyncParsableCommand {
                 )
             }
         }
-        func shell(_ command: String) {
+        func shell(_ command: String, exitOnFailure: Bool = true) {
             let process = Process()
             process.launchPath = "/bin/bash"
             process.arguments = ["-c", command]
             process.launch()
             process.waitUntilExit()
-            if process.terminationStatus != 0 {
+            if process.terminationStatus != 0 && exitOnFailure {
                 print("Error: \(command) failed")
                 SwiftCleaner.exit(
                     withError: Error.code(Int(process.terminationStatus))
@@ -155,8 +155,8 @@ struct SwiftCleaner: AsyncParsableCommand {
         // 3. Erase
         try await SwiftEraserCommand(reportPath: SwiftCleaner.reportName).run()
 
-        shell("rm \(SwiftCleaner.reportName)")
-        shell("rm default.profraw")
+        shell("rm \(SwiftCleaner.reportName)", exitOnFailure: false)
+        shell("rm default.profraw", exitOnFailure: false)
         print("✅ Cleaned!")
     }
 }
