@@ -155,8 +155,10 @@ struct SwiftCleaner: AsyncParsableCommand {
         // 3. Erase
         try await SwiftEraserCommand(reportPath: SwiftCleaner.reportName).run()
 
-        shell("rm \(SwiftCleaner.reportName)", exitOnFailure: false)
-        shell("rm default.profraw", exitOnFailure: false)
+        if !verbose {
+            shell("rm \(SwiftCleaner.reportName)", exitOnFailure: false)
+            shell("rm default.profraw", exitOnFailure: false)
+        }
         print("✅ Cleaned!")
     }
 }
