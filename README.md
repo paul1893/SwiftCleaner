@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="Screenshots/logo.png" alt="SwiftCleaner" height="140" />
+  <img src="Screenshots/logo.png" alt="SwiftCleaner" height="190" />
   <br>
 </h1>
 <p align="center">
