@@ -12,23 +12,31 @@
 </p>
 
 # SwiftCleaner
+
 A tool to automatically remove dead code in your codebase.
 
 # How to use
+
 1. Download the release on Github 
 2. Run
 
 ```swift
 SwiftCleaner 
-    --workspace ./MyProject.xcworkspace \
-    --destination "platform=iOS Simulator,OS=17.2,name=iPhone 15 Pro"
+    --workspace ./FooProject.xcworkspace \
+    --scheme FooScheme \
+    --target FooTarget \
+    --destination "platform=iOS Simulator,OS=17.5,name=iPhone 15 Pro"
     
 // OR
 
 SwiftCleaner 
-    --project ./MyProject.xccodeproj \
-    --destination "platform=iOS Simulator,OS=17.2,name=iPhone 15 Pro"
+    --project ./FooProject.xccodeproj \
+    --scheme FooScheme \
+    --target FooTarget \
+    --destination "platform=iOS Simulator,OS=17.5,name=iPhone 15 Pro"
 ```
+
+> 💡 `scheme` & `target` options are optional. SwiftCleaner fulfill scheme & target as name of the project if missing.
 
 # How it works
 <h1 align="center">
@@ -85,6 +93,10 @@ If one of these is reported as not used, they will NOT be deleted in the current
 - typealias nested in Class, Enum, Struct, Actor, Protocol, Extension
 
 # F.A.Q
+
+## Is my code source sent to a server ?
+No. All analysis are computed locally on your device. Nothing sent to a server.
+
 ## Why is my new APIs are deleted ?
 If you use trunk base development. For example pushing an unfinished feature, let's say a class that is making an API call but not connected to any UI. This code can be detected as dead code and then deleted. Always review the files after running SwiftCleaner.
   
@@ -95,6 +107,7 @@ You can annotate some of your code to not being deleted:
 class MyClass {}
 ```
 [Read more](https://github.com/peripheryapp/periphery?tab=readme-ov-file#comment-commands)
+
 ## Why some dead members are not found or some are false positive ?
 Because Periphery is not 100% accurate and could have false positive or unmatched dead members. SwiftCleaner could also delete some stuff that should not be deleted. Use SwiftCleaner as an helper tool and always review what's proposed to be deleted.
 

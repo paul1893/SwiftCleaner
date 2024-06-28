@@ -22,9 +22,21 @@ struct SwiftCleaner: AsyncParsableCommand {
 
     @Option(
         name: .shortAndLong,
+        help: "The scheme to analyze"
+    )
+    private var scheme: String?
+
+    @Option(
+        name: .shortAndLong,
+        help: "The target to analyze"
+    )
+    private var target: String?
+
+    @Option(
+        name: .shortAndLong,
         help: "The destination where building the project to make the analysis"
     )
-    private var destination = "platform=iOS Simulator,OS=17.2,name=iPhone 15 Pro"
+    private var destination = "platform=iOS Simulator,OS=17.5,name=iPhone 15 Pro"
 
     @Flag(name: .shortAndLong, help: "Show extra logging for debugging purposes")
     private var verbose = false
@@ -83,41 +95,44 @@ struct SwiftCleaner: AsyncParsableCommand {
         }
 
         // 0. Extract informations
+        let projectName: String? = if let path = workspace {
+            URL(fileURLWithPath: path).deletingPathExtension().lastPathComponent
+        } else if let path = project {
+            URL(fileURLWithPath: path).deletingPathExtension().lastPathComponent
+        } else {
+            nil
+        }
         if workspace == nil && project == nil {
             print("Error: You must provide either a workspace or a project.")
             SwiftCleaner.exit(withError: Error.code(1))
         }
-
-        // Extract the project name
-        var projectName: String?
-        if let path = workspace {
-            projectName = URL(fileURLWithPath: path).deletingPathExtension().lastPathComponent
-        } else if let path = project {
-            projectName = URL(fileURLWithPath: path).deletingPathExtension().lastPathComponent
-        }
         print("👉 Project Name: \(projectName ?? "Unknown")")
 
         // 1. Generate DerivedData
+        // If space xcodebuild expect space to be escaped & quoted. Ex: '/Users/jakob/Library/Mobile\ Documents/Foo.xcodeproj'
         if !skipBuild {
             print("📦 Building project ...")
             if let path = workspace {
-                shell("xcodebuild -workspace \(path) -scheme \(projectName ?? "") -parallelizeTargets -quiet -derivedDataPath \(FileManager.default.derivedData) -destination \"\(destination)\" -quiet clean build CODE_SIGNING_ALLOWED=\"NO\" ENABLE_BITCODE=\"NO\" DEBUG_INFORMATION_FORMAT=\"dwarf\" COMPILER_INDEX_STORE_ENABLE=\"YES\" INDEX_ENABLE_DATA_STORE=\"YES\"")
+                let unescapedQuotedPath = path.unescaped.quoted
+                shell("xcodebuild -workspace \(unescapedQuotedPath) -scheme \(scheme ?? projectName ?? "") -parallelizeTargets -quiet -derivedDataPath \(FileManager.default.derivedData) -destination \"\(destination)\" -quiet clean build CODE_SIGNING_ALLOWED=\"NO\" ENABLE_BITCODE=\"NO\" DEBUG_INFORMATION_FORMAT=\"dwarf\" COMPILER_INDEX_STORE_ENABLE=\"YES\" INDEX_ENABLE_DATA_STORE=\"YES\"")
             } else if let path = project {
-                shell("xcodebuild -project \(path) -scheme \(projectName ?? "") -parallelizeTargets -quiet -derivedDataPath \(FileManager.default.derivedData) -destination \"\(destination)\" -quiet clean build CODE_SIGNING_ALLOWED=\"NO\" ENABLE_BITCODE=\"NO\" DEBUG_INFORMATION_FORMAT=\"dwarf\" COMPILER_INDEX_STORE_ENABLE=\"YES\" INDEX_ENABLE_DATA_STORE=\"YES\"")
+                let unescapedQuotedPath = path.unescaped.quoted
+                shell("xcodebuild -project \(unescapedQuotedPath) -scheme \(scheme ?? projectName ?? "") -parallelizeTargets -quiet -derivedDataPath \(FileManager.default.derivedData) -destination \"\(destination)\" -quiet clean build CODE_SIGNING_ALLOWED=\"NO\" ENABLE_BITCODE=\"NO\" DEBUG_INFORMATION_FORMAT=\"dwarf\" COMPILER_INDEX_STORE_ENABLE=\"YES\" INDEX_ENABLE_DATA_STORE=\"YES\"")
             } else {
-                print("❌ Either PROJECT_PATH: \(project ?? "Unknown") or WORKSPACE_PATH: \(workspace ?? "Unknown") is missing")
+                print("❌ Either PROJECT_PATH: \"\(project ?? "Unspecified project")\" or WORKSPACE_PATH: \"\(workspace ?? "Unspecified workspace")\" is missing")
                 SwiftCleaner.exit(withError: Error.code(1))
             }
         }
 
         // 2. Make analysis through Periphery
+        // If space periphery scan expect space to NOT be escaped. Ex: /Users/jakob/Library/Mobile Documents/Foo.xcodeproj
         print("📦 Generating report ...")
         if let workspace {
             periphery(
                 "scan",
-                "--workspace", workspace,
-                "--schemes", "\(projectName ?? "")",
-                "--targets", "\(projectName ?? "")",
+                "--workspace", workspace.unescaped,
+                "--schemes", "\(scheme ?? projectName ?? "")",
+                "--targets", "\(target ?? projectName ?? "")",
                 "--skip-build",
                 "--format", "json",
                 "--index-store-path", "\(FileManager.default.derivedData)/Index.noindex/DataStore/",
@@ -134,9 +149,9 @@ struct SwiftCleaner: AsyncParsableCommand {
         } else if let project {
             periphery(
                 "scan",
-                "--project", project,
-                "--schemes", "\(projectName ?? "")",
-                "--targets", "\(projectName ?? "")",
+                "--project", project.unescaped,
+                "--schemes", "\(scheme ?? projectName ?? "")",
+                "--targets", "\(target ?? projectName ?? "")",
                 "--skip-build",
                 "--format", "json",
                 "--index-store-path", "\(FileManager.default.derivedData)/Index.noindex/DataStore/",
