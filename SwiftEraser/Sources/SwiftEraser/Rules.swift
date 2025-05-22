@@ -9,7 +9,8 @@ func delete(
     sourceText: String,
     types: [Periphery.JSONNode.Hint],
     kind: Periphery.JSONNode.Kind,
-    node: SwiftEraser.Node
+    node: SwiftEraser.Node,
+    onlyImport: Bool
 ) throws -> Action {
     var sourceFile = Parser.parse(source: sourceText)
 
@@ -23,6 +24,17 @@ func delete(
 
     // 1. Iterate through each statements of the source file to remove the declarations matching the entity name
     var statements = sourceFile.statements.compactMap { stmt -> CodeBlockItemListSyntax.Element? in
+        // MARK: Import
+        // Remove unused import
+        if kind == .module,
+           types == [.unused],
+           stmt.item.as(ImportDeclSyntax.self)?.path.first?.name.text == node.memberOrDeclName
+        {
+            return nil
+        }
+        guard !onlyImport else {
+            return stmt
+        }
 
         // MARK: Actor, Class, Enum, Struct, Protocol
         if types.notContains([.redundantConformance, .redundantProtocol]),

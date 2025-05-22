@@ -28,12 +28,6 @@ struct SwiftCleaner: AsyncParsableCommand {
 
     @Option(
         name: .shortAndLong,
-        help: "The target to analyze"
-    )
-    private var target: String?
-
-    @Option(
-        name: .shortAndLong,
         help: "The destination where building the project to make the analysis"
     )
     private var destination = "platform=iOS Simulator,OS=17.5,name=iPhone 15 Pro"
@@ -43,7 +37,10 @@ struct SwiftCleaner: AsyncParsableCommand {
 
     @Flag(name: .long, help: "Skip build if you already made it. Do not use this flag the first time you use SwiftCleaner")
     private var skipBuild = false
-    
+
+    @Flag(name: .long, help: "Only remove import")
+    private var onlyImport = false
+
     private static let reportName = "periphery-report.json"
 
     init() {}
@@ -130,9 +127,8 @@ struct SwiftCleaner: AsyncParsableCommand {
         if let workspace {
             periphery(
                 "scan",
-                "--workspace", workspace.unescaped,
+                "--project", workspace.unescaped, // Since periphery 3.1.0, no distinction between project & workspace for `scan``
                 "--schemes", "\(scheme ?? projectName ?? "")",
-                "--targets", "\(target ?? projectName ?? "")",
                 "--skip-build",
                 "--format", "json",
                 "--index-store-path", "\(FileManager.default.derivedData)/Index.noindex/DataStore/",
@@ -151,7 +147,6 @@ struct SwiftCleaner: AsyncParsableCommand {
                 "scan",
                 "--project", project.unescaped,
                 "--schemes", "\(scheme ?? projectName ?? "")",
-                "--targets", "\(target ?? projectName ?? "")",
                 "--skip-build",
                 "--format", "json",
                 "--index-store-path", "\(FileManager.default.derivedData)/Index.noindex/DataStore/",
@@ -168,7 +163,7 @@ struct SwiftCleaner: AsyncParsableCommand {
         }
 
         // 3. Erase
-        try await SwiftEraserCommand(reportPath: SwiftCleaner.reportName).run()
+        try await SwiftEraserCommand(reportPath: SwiftCleaner.reportName, onlyImport: onlyImport).run()
 
         if !verbose {
             shell("rm \(SwiftCleaner.reportName)", exitOnFailure: false)

@@ -11,10 +11,14 @@ public struct SwiftEraserCommand: AsyncParsableCommand {
     @Argument(help: "The report path")
     private var reportPath: String
 
+    @Argument(help: "Only delete unused imports")
+    private var onlyImport: Bool
+
     public init() {}
 
-    public init(reportPath: String) {
+    public init(reportPath: String, onlyImport: Bool = false) {
         self.reportPath = reportPath
+        self.onlyImport = onlyImport
     }
 
     public func run() async throws {
@@ -63,20 +67,24 @@ public struct SwiftEraserCommand: AsyncParsableCommand {
                         column: column
                     )
                 )
+
                 guard let matchNode = match.node else {
-                    print("❌ \(peripheryNode.name): Cannot find parent node")
-                    SwiftEraserCommand.exit()
+                    print("❌ \(peripheryNode.ids[0]): Cannot find node. This node will be ignored.")
+                    continue
                 }
+
                 nodes.append(
                     SwiftEraser.Node(
                         memberOrDeclName: peripheryNode.name,
+                        peripheryNode: peripheryNode,
                         node: matchNode,
                         parent: match.parent
                     )
                 )
             }
 
-            for (node, peripheryNode) in zip(nodes, peripheryNodes) {
+            for node in nodes {
+                let peripheryNode = node.peripheryNode
                 do {
                     let pathLineAndColumn = peripheryNode.location.split(separator: ".swift")
                     let filePath = "\(String(pathLineAndColumn[0])).swift"
@@ -87,7 +95,8 @@ public struct SwiftEraserCommand: AsyncParsableCommand {
                         sourceText: sourceText,
                         types: peripheryNode.hints,
                         kind: peripheryNode.kind,
-                        node: node
+                        node: node,
+                        onlyImport: onlyImport
                     )
                     switch action {
                     case .delete:

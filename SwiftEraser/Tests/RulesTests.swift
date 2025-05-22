@@ -18,6 +18,7 @@ final class RulesTests: XCTestCase {
             kind: .class,
             node: .init(
                 memberOrDeclName: "FooActor",
+                peripheryNode: .stub,
                 node: .actor("FooActor"),
                 parent: nil
             )
@@ -45,6 +46,7 @@ final class RulesTests: XCTestCase {
             kind: .class,
             node: .init(
                 memberOrDeclName: "FooClass",
+                peripheryNode: .stub,
                 node: .class("FooClass"),
                 parent: nil
             )
@@ -72,6 +74,7 @@ final class RulesTests: XCTestCase {
             kind: .enum,
             node: .init(
                 memberOrDeclName: "FooEnum",
+                peripheryNode: .stub,
                 node: .enum("FooEnum"),
                 parent: nil
             )
@@ -99,6 +102,7 @@ final class RulesTests: XCTestCase {
             kind: .struct,
             node: .init(
                 memberOrDeclName: "FooStruct",
+                peripheryNode: .stub,
                 node: .struct("FooStruct"),
                 parent: nil
             )
@@ -126,6 +130,7 @@ final class RulesTests: XCTestCase {
             kind: .class,
             node: .init(
                 memberOrDeclName: "FooExtension",
+                peripheryNode: .stub,
                 node: .extension("FooExtension"),
                 parent: nil
             )
@@ -153,6 +158,7 @@ final class RulesTests: XCTestCase {
             kind: .protocol,
             node: .init(
                 memberOrDeclName: "FooProtocol",
+                peripheryNode: .stub,
                 node: .protocol("FooProtocol"),
                 parent: nil
             )
@@ -184,6 +190,7 @@ final class RulesTests: XCTestCase {
             kind: .protocol,
             node: .init(
                 memberOrDeclName: "FooProtocol",
+                peripheryNode: .stub,
                 node: .protocol("FooProtocol"),
                 parent: nil
             )
@@ -217,6 +224,7 @@ final class RulesTests: XCTestCase {
             kind: .protocol,
             node: .init(
                 memberOrDeclName: "FooProtocol",
+                peripheryNode: .stub,
                 node: .protocol("FooProtocol"),
                 parent: nil
             )
@@ -249,6 +257,7 @@ final class RulesTests: XCTestCase {
             kind: .protocol,
             node: .init(
                 memberOrDeclName: "BarProtocol",
+                peripheryNode: .stub,
                 node: .protocol("BarProtocol"),
                 parent: nil
             )
@@ -281,6 +290,7 @@ final class RulesTests: XCTestCase {
             kind: .varGlobal,
             node: .init(
                 memberOrDeclName: "a",
+                peripheryNode: .stub,
                 node: .variable("a"),
                 parent: nil
             )
@@ -314,6 +324,7 @@ final class RulesTests: XCTestCase {
             kind: .typealias,
             node: .init(
                 memberOrDeclName: "A",
+                peripheryNode: .stub,
                 node: .typeAlias("A"),
                 parent: nil
             )
@@ -349,6 +360,7 @@ final class RulesTests: XCTestCase {
             kind: .varInstance,
             node: .init(
                 memberOrDeclName: "a",
+                peripheryNode: .stub,
                 node: .variable("a", type: "FooProtocol"),
                 parent: .class("FooClass")
             )
@@ -384,6 +396,7 @@ final class RulesTests: XCTestCase {
             kind: .varInstance,
             node: .init(
                 memberOrDeclName: "a",
+                peripheryNode: .stub,
                 node: .variable("a", type: "FooProtocol"),
                 parent: .class("FooClass")
             )
@@ -419,6 +432,7 @@ final class RulesTests: XCTestCase {
             kind: .varInstance,
             node: .init(
                 memberOrDeclName: "delegate",
+                peripheryNode: .stub,
                 node: .variable("delegate", type: "FooDelegate", optional: true),
                 parent: .class("FooClass")
             )
@@ -454,6 +468,7 @@ final class RulesTests: XCTestCase {
             kind: .functionMethodInstance,
             node: .init(
                 memberOrDeclName: "foo()",
+                peripheryNode: .stub,
                 node: .function("foo"),
                 parent: .class("FooClass")
             )
@@ -488,6 +503,7 @@ final class RulesTests: XCTestCase {
             kind: .functionMethodInstance,
             node: .init(
                 memberOrDeclName: "foo(a:,b:)",
+                peripheryNode: .stub,
                 node: .function("foo", .parameters(firstName: "a", typeName: "Int"), .parameters(firstName: "b", typeName: "String")),
                 parent: .class("FooClass")
             )
@@ -522,6 +538,7 @@ final class RulesTests: XCTestCase {
             kind: .functionConstructor,
             node: .init(
                 memberOrDeclName: "init()",
+                peripheryNode: .stub,
                 node: .function("init"),
                 parent: .class("FooClass")
             )
@@ -556,6 +573,7 @@ final class RulesTests: XCTestCase {
             kind: .functionConstructor,
             node: .init(
                 memberOrDeclName: "init(a:)",
+                peripheryNode: .stub,
                 node: .function("init", .parameters(firstName: "a", typeName: "Int")),
                 parent: .class("FooClass")
             )
@@ -588,6 +606,7 @@ final class RulesTests: XCTestCase {
             kind: .enumelement,
             node: .init(
                 memberOrDeclName: "b",
+                peripheryNode: .stub,
                 node: Syntax(
                     EnumCaseElementListSyntax.Element(
                         name: .identifier("b")
@@ -623,6 +642,7 @@ final class RulesTests: XCTestCase {
             kind: .functionFree,
             node: .init(
                 memberOrDeclName: "NSLocalizedStringAccount(_:)",
+                peripheryNode: .stub,
                 node: .function(
                     "NSLocalizedStringAccount",
                     .parameters(secondName: "key", typeName: "String")
@@ -667,6 +687,7 @@ final class RulesTests: XCTestCase {
             kind: .functionMethodInstance,
             node: .init(
                 memberOrDeclName: "reloadRow(_:)",
+                peripheryNode: .stub,
                 node: .function(
                     "reloadRow",
                     .parameters(secondName: "row", typeName: "Row")
@@ -704,6 +725,7 @@ final class RulesTests: XCTestCase {
             kind: .functionMethodInstance,
             node: .init(
                 memberOrDeclName: "foo()",
+                peripheryNode: .stub,
                 node: .function("foo"),
                 parent: .class("Foo")
             )
@@ -738,6 +760,7 @@ final class RulesTests: XCTestCase {
             kind: .functionMethodInstance,
             node: .init(
                 memberOrDeclName: "setSelectedValue(value:)",
+                peripheryNode: .stub,
                 node: .function(
                     "setSelectedValue",
                     .parameters(firstName: "value", typeName: "String")
@@ -780,6 +803,7 @@ final class RulesTests: XCTestCase {
             kind: .functionMethodInstance,
             node: .init(
                 memberOrDeclName: "localized(table:_:)",
+                peripheryNode: .stub,
                 node: .function(
                     "localized(table:_:)",
                     .parameters(firstName: "table", typeName: "LocalizeTable"),
@@ -818,6 +842,7 @@ final class RulesTests: XCTestCase {
             kind: .functionMethodInstance,
             node: .init(
                 memberOrDeclName: "update(with:)",
+                peripheryNode: .stub,
                 node: .function(
                     "update(with:)",
                     .parameters(firstName: "with", secondName: "viewModel", typeName: "ViewModel")
@@ -860,6 +885,7 @@ final class RulesTests: XCTestCase {
             kind: .functionMethodInstance,
             node: .init(
                 memberOrDeclName: "update(with:)",
+                peripheryNode: .stub,
                 node: .function(
                     "update(with:)",
                     .parameters(firstName: "with", secondName: "viewModel", typeName: "ViewModel")
@@ -907,6 +933,7 @@ final class RulesTests: XCTestCase {
             kind: .functionMethodInstance,
             node: .init(
                 memberOrDeclName: "getView()",
+                peripheryNode: .stub,
                 node: .function("getView()"),
                 parent: .class("FooView")
             )
@@ -936,6 +963,7 @@ final class RulesTests: XCTestCase {
             kind: .functionMethodInstance,
             node: .init(
                 memberOrDeclName: "foo(:)",
+                peripheryNode: .stub,
                 node: .function("foo"),
                 parent: .extension("Foo")
             )
@@ -967,6 +995,7 @@ final class RulesTests: XCTestCase {
             kind: .functionSubscript,
             node: .init(
                 memberOrDeclName: "subscript(index:)",
+                peripheryNode: .stub,
                 node: .`subscript`(
                     "subscript(index:)",
                     .parameters(firstName: "index", typeName: "Int"),
@@ -999,6 +1028,7 @@ final class RulesTests: XCTestCase {
             kind: .functionSubscript,
             node: .init(
                 memberOrDeclName: "subscript(_:)",
+                peripheryNode: .stub,
                 node: .`subscript`(
                     "subscript(_:)",
                     .parameters(secondName: "index", typeName: "Int"),
@@ -1038,6 +1068,7 @@ final class RulesTests: XCTestCase {
             kind: .functionConstructor,
             node: .init(
                 memberOrDeclName: "init(error:)",
+                peripheryNode: .stub,
                 node: .function("init",
                                 .parameters(firstName: "error", typeName: "BazError")
                 ),
@@ -1083,6 +1114,7 @@ final class RulesTests: XCTestCase {
             kind: .protocol,
             node: .init(
                 memberOrDeclName: "BarProtocol",
+                peripheryNode: .stub,
                 node: .protocol("BarProtocol"),
                 parent: .protocol("BarProtocol")
             )
@@ -1134,6 +1166,7 @@ final class RulesTests: XCTestCase {
             kind: .functionFree,
             node: .init(
                 memberOrDeclName: "NSLocalizedString(_:,tableName:,referenceClass:)",
+                peripheryNode: .stub,
                 node: Syntax(functionNode),
                 parent: .codeBlockItem(DeclSyntax(functionNode))
             )
@@ -1162,6 +1195,7 @@ final class RulesTests: XCTestCase {
             kind: .varInstance,
             node: .init(
                 memberOrDeclName: "property",
+                peripheryNode: .stub,
                 node: .variable("property", type: "FooDelegate"),
                 parent: .class("FooViewModel")
             )
@@ -1198,6 +1232,7 @@ final class RulesTests: XCTestCase {
             kind: .varInstance,
             node: .init(
                 memberOrDeclName: "delegate",
+                peripheryNode: .stub,
                 node: .variable("delegate", type: "FooViewModelDelegate"),
                 parent: .class("FooViewModel")
             )
@@ -1234,6 +1269,7 @@ final class RulesTests: XCTestCase {
             kind: .varInstance,
             node: .init(
                 memberOrDeclName: "accessibility",
+                peripheryNode: .stub,
                 node: .variable("accessibility"),
                 parent: .class("FooViewModel")
             )
@@ -1265,6 +1301,7 @@ final class RulesTests: XCTestCase {
             kind: .varInstance,
             node: .init(
                 memberOrDeclName: "accessibility",
+                peripheryNode: .stub,
                 node: .variable("accessibility"),
                 parent: .class("Foo")
             )
@@ -1295,6 +1332,7 @@ final class RulesTests: XCTestCase {
             kind: .varInstance,
             node: .init(
                 memberOrDeclName: "name",
+                peripheryNode: .stub,
                 node: .variable("name"),
                 parent: .class("Foo")
             )
@@ -1339,6 +1377,7 @@ final class RulesTests: XCTestCase {
             kind: .varInstance,
             node: .init(
                 memberOrDeclName: "id",
+                peripheryNode: .stub,
                 node: .variable("id", type: "Int"),
                 parent: .struct("Foo")
             )
@@ -1390,6 +1429,7 @@ final class RulesTests: XCTestCase {
             kind: .varInstance,
             node: .init(
                 memberOrDeclName: "id",
+                peripheryNode: .stub,
                 node: .variable("id", type: "Int"),
                 parent: .struct("Bar")
             )
@@ -1439,6 +1479,7 @@ final class RulesTests: XCTestCase {
             kind: .varInstance,
             node: .init(
                 memberOrDeclName: "id",
+                peripheryNode: .stub,
                 node: .variable("id", type: "Int"),
                 parent: .struct("Foo")
             )
@@ -1485,6 +1526,7 @@ final class RulesTests: XCTestCase {
             kind: .varGlobal,
             node: .init(
                 memberOrDeclName: "SIT",
+                peripheryNode: .stub,
                 node: Syntax(`var`),
                 parent: .codeBlockItem(
                     DeclSyntax(`var`)
@@ -1548,6 +1590,7 @@ final class RulesTests: XCTestCase {
             kind: .varGlobal,
             node: .init(
                 memberOrDeclName: "PERSONAL_DATA_SERVICE_UNAVAILABLE",
+                peripheryNode: .stub,
                 node: Syntax(var0),
                 parent: .codeBlockItem(
                     DeclSyntax(var0)
@@ -1561,6 +1604,7 @@ final class RulesTests: XCTestCase {
             kind: .varGlobal,
             node: .init(
                 memberOrDeclName: "ACCOUNT_PRO_ACCOUNT",
+                peripheryNode: .stub,
                 node: Syntax(var1),
                 parent: .codeBlockItem(
                     DeclSyntax(var1)
@@ -1574,6 +1618,7 @@ final class RulesTests: XCTestCase {
             kind: .varGlobal,
             node: .init(
                 memberOrDeclName: "CONFIRMATION_INVALID_EMAIL",
+                peripheryNode: .stub,
                 node: Syntax(var2),
                 parent: .codeBlockItem(
                     DeclSyntax(var2)
@@ -1587,6 +1632,7 @@ final class RulesTests: XCTestCase {
             kind: .varGlobal,
             node: .init(
                 memberOrDeclName: "_IPSUM_DOLOR_SIT_",
+                peripheryNode: .stub,
                 node: Syntax(var3),
                 parent: .codeBlockItem(
                     DeclSyntax(var3)
@@ -1600,6 +1646,7 @@ final class RulesTests: XCTestCase {
             kind: .functionFree,
             node: .init(
                 memberOrDeclName: "NSLocalizedStringAccount(_:)",
+                peripheryNode: .stub,
                 node: Syntax(func1),
                 parent: .codeBlockItem(
                     DeclSyntax(func1)
@@ -1645,6 +1692,7 @@ final class RulesTests: XCTestCase {
             kind: .functionMethodInstance,
             node: .init(
                 memberOrDeclName: "didEditAccount(account:)",
+                peripheryNode: .stub,
                 node: .function(
                     "didEditAccount(account:)",
                     .parameters(firstName: "account", typeName: "Account")
@@ -1678,6 +1726,7 @@ final class RulesTests: XCTestCase {
             kind: .varInstance,
             node: .init(
                 memberOrDeclName: "foo",
+                peripheryNode: .stub,
                 node: .variable("foo"),
                 parent: .protocol("FooDelegate")
             )
@@ -1710,6 +1759,7 @@ final class RulesTests: XCTestCase {
             kind: .typealias,
             node: .init(
                 memberOrDeclName: "Foo",
+                peripheryNode: .stub,
                 node: Syntax(typealiasNode),
                 parent: .codeBlockItem(
                     DeclSyntax(typealiasNode)
@@ -1750,6 +1800,7 @@ final class RulesTests: XCTestCase {
             kind: .varStatic,
             node: .init(
                 memberOrDeclName: "b",
+                peripheryNode: .stub,
                 node: .variable("b"),
                 parent: .struct("Foo")
             )
@@ -1791,6 +1842,7 @@ final class RulesTests: XCTestCase {
             kind: .functionMethodStatic,
             node: .init(
                 memberOrDeclName: "foo()",
+                peripheryNode: .stub,
                 node: .function("foo"),
                 parent: .struct("Foo")
             )
@@ -1819,6 +1871,7 @@ final class RulesTests: XCTestCase {
             kind: .functionConstructor,
             node: .init(
                 memberOrDeclName: "init(a:)",
+                peripheryNode: .stub,
                 node: .function("init(a:)", .parameters(firstName: "a", typeName: "Foo")),
                 parent: .class("FooView")
             )
@@ -1854,6 +1907,7 @@ final class RulesTests: XCTestCase {
             kind: .functionConstructor,
             node: .init(
                 memberOrDeclName: "init(error:)",
+                peripheryNode: .stub,
                 node: .function("init", .parameters(firstName: "error", secondName: nil, typeName: "BazError")),
                 parent: .enum("FooError")
             )
@@ -1892,6 +1946,7 @@ final class RulesTests: XCTestCase {
             kind: .functionMethodInstance,
             node: .init(
                 memberOrDeclName: "foo(x:)",
+                peripheryNode: .stub,
                 node: .function(
                     "foo(x:)",
                     .parameters(firstName: "x", typeName: "Int")
@@ -1929,6 +1984,7 @@ final class RulesTests: XCTestCase {
             kind: .functionSubscript,
             node: .init(
                 memberOrDeclName: "subscript(x:)",
+                peripheryNode: .stub,
                 node: .subscript(
                     "subscript(x:)",
                     .parameters(firstName: "x", typeName: "Int"),
@@ -1967,6 +2023,7 @@ final class RulesTests: XCTestCase {
             kind: .functionConstructor,
             node: .init(
                 memberOrDeclName: "init(x:)",
+                peripheryNode: .stub,
                 node: .function(
                     "init(x:)",
                     .parameters(firstName: "x", typeName: "Int")
@@ -2001,6 +2058,7 @@ final class RulesTests: XCTestCase {
             kind: .protocol,
             node: .init(
                 memberOrDeclName: "FooProtocol",
+                peripheryNode: .stub,
                 node: .protocol("FooProtocol"),
                 parent: .extension("Foo")
             )
@@ -2041,6 +2099,7 @@ final class RulesTests: XCTestCase {
             kind: .protocol,
             node: .init(
                 memberOrDeclName: "FooManager",
+                peripheryNode: .stub,
                 node: .protocol("FooManager"),
                 parent: .protocol("FooManager")
             )
@@ -2051,6 +2110,7 @@ final class RulesTests: XCTestCase {
             kind: .protocol,
             node: .init(
                 memberOrDeclName: "FooManager",
+                peripheryNode: .stub,
                 node: .protocol("FooManager"),
                 parent: .protocol("FooManager")
             )
@@ -2091,6 +2151,7 @@ final class RulesTests: XCTestCase {
             kind: .functionMethodInstance,
             node: .init(
                 memberOrDeclName: "updateValue(_:)",
+                peripheryNode: .stub,
                 node: .function("updateValue", .parameters(secondName: "boolValue", typeName: "Bool")),
                 parent: .struct("Foo")
             )
@@ -2128,6 +2189,7 @@ final class RulesTests: XCTestCase {
             kind: .varInstance,
             node: .init(
                 memberOrDeclName: "bar",
+                peripheryNode: .stub,
                 node: .variable("bar", type: "BarProtocol"),
                 parent: .protocol("FooDependenciesProtocol")
             )
@@ -2138,6 +2200,7 @@ final class RulesTests: XCTestCase {
             kind: .varInstance,
             node: .init(
                 memberOrDeclName: "bar",
+                peripheryNode: .stub,
                 node: .variable("bar", type: "BarProtocol"),
                 parent: .class("FooDependencies")
             )
@@ -2155,4 +2218,86 @@ final class RulesTests: XCTestCase {
             """
         )
     }
+
+    func test_should_delete_import() throws {
+        // GIVEN
+        let source = """
+        import SwiftUI
+        protocol FooDelegate: AnyObject {
+            var foo: Foo { get set }
+        }
+        """
+
+        // WHEN
+        let result = try delete(
+            sourceText: source,
+            types: [.unused],
+            kind: .module,
+            node: .init(
+                memberOrDeclName: "SwiftUI",
+                peripheryNode: .stub,
+                node: .actor("Foo"),
+                parent: nil
+            )
+        )
+
+        // THEN
+        XCTAssertEqual(
+            result.source,
+            """
+            
+            protocol FooDelegate: AnyObject {
+                var foo: Foo { get set }
+            }
+            """
+        )
+    }
+
+    func test_only_import_should_avoid_deleting_other_members() throws {
+        // GIVEN
+        let source = """
+        protocol FooDelegate: AnyObject {
+            var foo: Foo { get set }
+        }
+        """
+
+        // WHEN
+        let result = try delete(
+            sourceText: source,
+            types: [.unused],
+            kind: .varInstance,
+            node: .init(
+                memberOrDeclName: "foo",
+                peripheryNode: .stub,
+                node: .variable("foo"),
+                parent: .protocol("FooDelegate")
+            ),
+            onlyImport: true
+        )
+
+        // THEN
+        XCTAssertEqual(
+            result.source,
+            """
+            protocol FooDelegate: AnyObject {
+                var foo: Foo { get set }
+            }
+            """
+        )
+    }
+}
+
+private func delete(
+    sourceText: String,
+    types: [Periphery.JSONNode.Hint],
+    kind: Periphery.JSONNode.Kind,
+    node: SwiftEraser.Node
+) throws -> Action {
+    try delete(
+        sourceText: sourceText,
+        types: types,
+        kind: kind,
+        node: node,
+        onlyImport: false
+    )
 }

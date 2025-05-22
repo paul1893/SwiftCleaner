@@ -39,6 +39,7 @@ extension SourceFileSyntax {
                 || (unwrappedNode.as(FunctionDeclSyntax.self) != nil)
                 || (unwrappedNode.as(VariableDeclSyntax.self) != nil)
                 || (unwrappedNode.as(TypeAliasDeclSyntax.self) != nil)
+                || (unwrappedNode.as(ImportDeclSyntax.self) != nil)
             {
                 localNode = unwrappedNode
                 break
@@ -54,6 +55,7 @@ extension SourceFileSyntax {
                 || (unwrappedNode.as(StructDeclSyntax.self) != nil)
                 || (unwrappedNode.as(ExtensionDeclSyntax.self) != nil)
                 || (unwrappedNode.as(CodeBlockItemSyntax.self) != nil)
+                || (unwrappedNode.as(ImportDeclSyntax.self) != nil)
             {
                 return (node: localNode, parent: unwrappedNode)
             }

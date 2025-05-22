@@ -24,16 +24,14 @@ A tool to automatically remove dead code in your codebase.
 SwiftCleaner 
     --workspace ./FooProject.xcworkspace \
     --scheme FooScheme \
-    --target FooTarget \
-    --destination "platform=iOS Simulator,OS=17.5,name=iPhone 15 Pro"
+    --destination "platform=iOS Simulator,OS=18.2,name=iPhone 16 Pro"
     
 // OR
 
 SwiftCleaner 
     --project ./FooProject.xccodeproj \
     --scheme FooScheme \
-    --target FooTarget \
-    --destination "platform=iOS Simulator,OS=17.5,name=iPhone 15 Pro"
+    --destination "platform=iOS Simulator,OS=18.2,name=iPhone 16 Pro"
 ```
 
 > 💡 `scheme` & `target` options are optional. SwiftCleaner fulfill scheme & target as name of the project if missing.
@@ -65,6 +63,7 @@ Here's the smart deletion applied:
 ## Flags
 
 - `--skip-build` use this flag to skip build. Only use this flag if you are sure to have cache in your DerivedData folder.
+- `--only-import` use this flag to only delete unused import accross your files.
 - `--verbose` use this flag to print additional information when running SwiftCleaner.
 
 # Supported
@@ -85,6 +84,7 @@ If one of these is reported as not used, they will be deleted:
 - Functions
 - Init functions
 - Static functions
+- Unused import
 
 # Not supported
 If one of these is reported as not used, they will NOT be deleted in the current version:
@@ -252,4 +252,4 @@ class Foo: BarProtocol {}
 Note that if Foo & FooProtocol must be in the same file for this optimisation.
 
 ## Periphery version
-- Periphery's commit 432ec21890bf61b7159bc0513bde6d91269fdd43 (10/01/2024)
+- Based on [Periphery 3.1.0](https://github.com/peripheryapp/periphery/releases/tag/3.1.0) commit: 241bbdc
